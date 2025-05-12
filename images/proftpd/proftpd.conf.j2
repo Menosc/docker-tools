@@ -1,7 +1,8 @@
 # ProFTPD configuration file for Docker.
-
 Include /etc/proftpd/modules.d/*.conf
 Include /etc/proftpd/conf.d/*.conf
+
+LoadModule mod_sftp.c
 
 DefaultServer           on
 Group                   proftpd

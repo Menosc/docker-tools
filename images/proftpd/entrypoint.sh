@@ -23,16 +23,15 @@ if [ "$SFTP_ENABLE" = "on" ]; then
   test -f /etc/ssh/ssh_host_rsa_key   || ssh-keygen -m PEM -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa -b 2048
   test -f /etc/ssh/ssh_host_ecdsa_key || ssh-keygen -m PEM -f /etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa -b 521
 
-  sed -i -e "/^Port/s/^/#/" /etc/proftpd/proftpd.conf
-  
   sed -i \
       -e "s/^#\(  SFTPEngine on\)/\1/" \
-      -e "s/^#\(  Port 2222.*\)/  Port $SFTP_PORT/" \
+      -e "s/^#\(  Port 22.*\)/  Port $SFTP_PORT/" \
       -e "s/^#\(  SFTPCompression delayed\)/\1/" \
       -e "s/^#\(  SFTPHostKey .*ssh_host_rsa_key\)/\1/" \
       -e "s/dsa_key/ssh_host_dsa_key (NO LONGER SUPPORTED)/" \
       /etc/proftpd/conf.d/sftp.conf
 fi
+
 
 if [ "$ANONYMOUS_DISABLE" = "on" ]; then
   sed -i '/<Anonymous/,/<\/Anonymous>/d' /etc/proftpd/proftpd.conf

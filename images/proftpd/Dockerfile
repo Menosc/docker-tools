@@ -29,7 +29,20 @@ ENV ALLOW_OVERWRITE=on \
     TZ=UTC \
     WRITE_ENABLE=AllowAll
 
+RUN apk add --update \
+    libcrypto3 \
+    proftpd=$PROFTPD_VERSION \
+    tzdata \
+    proftpd-mod_sftp \
+    openssh-keygen
+
+RUN mkdir -p /etc/ssh && \
+    ssh-keygen -m PEM -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa -b 2048 && \
+    ssh-keygen -m PEM -f /etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa -b 521
+
+
 COPY proftpd.conf.j2 /etc/proftpd/proftpd.conf
+COPY sftp.conf /etc/proftpd/conf.d/sftp.conf
 RUN chmod 644 /etc/proftpd/proftpd.conf && \
     apk add --update \
         libcrypto3 \
